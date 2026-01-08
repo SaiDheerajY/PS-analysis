@@ -1,0 +1,106 @@
+/* ===== Global ===== */
+body {
+  font-family: "Arial", sans-serif;
+  background: #0b132b;
+  color: #ff9f1c;
+  padding: 30px;
+  margin: 0;
+}
+
+/* ===== Header ===== */
+h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ff9f1c;
+  margin-bottom: 15px;
+}
+
+/* ===== Filters ===== */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.filters input,
+.filters button {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+}
+
+.filters input {
+  background: #1c2541;
+  color: #ffffff;
+  border: 1px solid #3a506b;
+}
+
+.filters input::placeholder {
+  color: #b0b8c1;
+}
+
+.filters button {
+  background: #ff9f1c;
+  color: #0b132b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filters button:hover {
+  background: #ffb347;
+  transform: scale(1.04);
+}
+
+/* ===== Info Text ===== */
+#count, #avg {
+  text-align: center;
+  font-size: 16px;
+  margin-top: 8px;
+  color: #eaeaea;
+}
+
+/* ===== Table Container ===== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+/* ===== Table ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1c2541;
+  color: #ffffff;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #3a506b;
+  text-align: center;
+}
+
+th {
+  background: #0b132b;
+  color: #ff9f1c;
+}
+
+tr:nth-child(even) {
+  background: #16213e;
+}
+
+tr:hover {
+  background: #24305e;
+}
+
+/* ===== Smooth Hover ===== */
+tr {
+  transition: background 0.15s ease;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Internship Allotment Data</title>
+
+  <!-- Mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>Internship Allotment Data</h2>
+
+  <div class="filters">
+    <input type="number" id="minCgpa" placeholder="Min CGPA" step="0.01">
+    <input type="number" id="maxCgpa" placeholder="Max CGPA" step="0.01">
+    <input type="text" id="company" placeholder="Company name">
+    <button onclick="applyFilters()">Apply Filters</button>
+    <button onclick="toggleSort()">Sort by Stipend</button>
+  </div>
+
+  <p id="count"></p>
+  <p id="avg"></p>
+
+  <!-- Table wrapper fixes empty-right-space issue -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>CGPA</th>
+          <th>Company</th>
+          <th>Stipend</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
