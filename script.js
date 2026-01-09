@@ -1,4 +1,6 @@
-let rawData = [];        // full loaded dataset (semester file)
+/* ================= GLOBAL STATE ================= */
+
+let rawData = [];        // full dataset (loaded once)
 let filteredData = [];  // after filters + sort
 let visibleCount = 0;
 let observer = null;
@@ -8,7 +10,7 @@ const BATCH_SIZE = 50;
 
 /* ================= LOAD DATA ================= */
 
-fetch("data.json")   // shuld change to sem1.json / sem2.json later
+fetch("data.json")   // or sem1.json / sem2.json later if needed
   .then(res => res.json())
   .then(json => {
     rawData = json
@@ -26,12 +28,14 @@ fetch("data.json")   // shuld change to sem1.json / sem2.json later
         return {
           CGPA: cgpa,
           Company: d.AllottedStationName,
-          Stipend: stipend
+          Stipend: stipend,
+          Sem1: Number(d.AllotedSemester1),
+          Sem2: Number(d.AllotedSemester2)
         };
       })
       .filter(Boolean);
 
-    // Initial state: no filters applied
+    // Default: no filters applied
     filteredData = rawData;
     render();
   })
@@ -89,19 +93,29 @@ function setupObserver() {
   observer.observe(document.getElementById("scroll-sentinel"));
 }
 
-/* ================= FILTERING ================= */
+/* ================= FILTERING (INCLUDING SEMESTER) ================= */
 
 function applyFilters() {
   const min = parseFloat(document.getElementById("minCgpa").value) || 0;
   const max = parseFloat(document.getElementById("maxCgpa").value) || 10;
   const company =
     document.getElementById("company").value.toLowerCase();
+  const semester =
+    document.getElementById("semester").value;
 
-  filteredData = rawData.filter(d =>
-    d.CGPA >= min &&
-    d.CGPA <= max &&
-    d.Company.toLowerCase().includes(company)
-  );
+  filteredData = rawData.filter(d => {
+    const semOk =
+      semester === "all" ||
+      (semester === "sem1" && d.Sem1 === 1) ||
+      (semester === "sem2" && d.Sem2 === 1);
+
+    return (
+      semOk &&
+      d.CGPA >= min &&
+      d.CGPA <= max &&
+      d.Company.toLowerCase().includes(company)
+    );
+  });
 
   render();
 }
