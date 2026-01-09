@@ -38,6 +38,9 @@ fetch("data.json")   // or sem1.json / sem2.json later if needed
     // Default: no filters applied
     filteredData = rawData;
     render();
+    const medianCgpa = getMedian(rawData.map(d => d.CGPA));
+document.getElementById("medianCgpa").innerText =
+  `Median CGPA : ${medianCgpa.toFixed(2)}`;
   })
   .catch(err => console.error("Error loading data:", err));
 
@@ -137,15 +140,33 @@ function toggleSort() {
 
 function renderStats(rows) {
   const avgElem = document.getElementById("avg");
+  const medianElem = document.getElementById("medianStipend");
 
   if (rows.length === 0) {
-    avgElem.innerText = "Average stipend for this CGPA range: N/A";
+    avgElem.innerText = "Average stipend: N/A";
+    medianElem.innerText = "Median stipend: N/A";
     return;
   }
 
   const total = rows.reduce((sum, r) => sum + r.Stipend, 0);
   const avg = Math.round(total / rows.length);
 
+  const medianStipend = getMedian(rows.map(r => r.Stipend));
+
   avgElem.innerText =
-    `Average stipend for this CGPA range: ₹${avg.toLocaleString("en-IN")}`;
+    `Average stipend: ₹${avg.toLocaleString("en-IN")}`;
+
+  medianElem.innerText =
+    `Median stipend: ₹${Math.round(medianStipend).toLocaleString("en-IN")}`;
+}
+//calculate median
+function getMedian(arr) {
+  if (arr.length === 0) return null;
+
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+
+  return sorted.length % 2 !== 0
+    ? sorted[mid]
+    : (sorted[mid - 1] + sorted[mid]) / 2;
 }

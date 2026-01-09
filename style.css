@@ -1,133 +1,149 @@
-/* ===== Global ===== */
-body {
-  font-family: "Arial", sans-serif;
-  background: #0b132b;
-  color: #ff9f1c;
-  padding: 30px;
-  margin: 0;
+
+* {
+  box-sizing: border-box;
 }
 
-/* ===== Header ===== */
+body {
+  margin: 0;
+  padding: 30px;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #060b1f, #0b132b);
+  color: #e5e7eb;
+}
+
+/* ================= HEADER ================= */
+
 h2 {
   text-align: center;
   font-size: 26px;
   font-weight: 700;
+  margin-bottom: 25px;
   color: #ff9f1c;
-  margin-bottom: 15px;
 }
 
-/* ===== Filters ===== */
+/* ================= FILTER BAR ================= */
+
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
-  margin-bottom: 15px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .filters input,
-.filters button {
+.filters select {
+  background: #111a3a;
+  border: 1px solid #2a3a6a;
+  color: #e5e7eb;
   padding: 8px 12px;
-  border-radius: 5px;
-  border: none;
-  font-size: 15px;
-}
-
-.filters input {
-  background: #1c2541;
-  color: #ffffff;
-  border: 1px solid #3a506b;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 150px;
 }
 
 .filters input::placeholder {
-  color: #b0b8c1;
+  color: #9aa3b2;
 }
 
 .filters button {
   background: #ff9f1c;
   color: #0b132b;
-  font-weight: bold;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .filters button:hover {
-  background: #ffb347;
-  transform: scale(1.04);
+  background: #ffb84d;
+  transform: translateY(-1px);
 }
 
-/* ===== Info Text ===== */
-#count, #avg {
+/* ================= STATS PANEL ================= */
+
+.stats {
+  margin: 20px auto 25px;
+  max-width: 520px;
+  padding: 16px 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 159, 28, 0.12),
+    rgba(11, 19, 43, 0.95)
+  );
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
   text-align: center;
-  font-size: 16px;
-  margin-top: 8px;
-  color: #eaeaea;
 }
 
-/* ===== Table Container ===== */
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  margin-top: 15px;
+.stats > div {
+  padding: 6px 0;
+  font-size: 15px;
+  letter-spacing: 0.3px;
 }
 
-/* ===== Table ===== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #1c2541;
-  color: #ffffff;
+.stats > div:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Individual stat emphasis */
+
+#count {
   font-size: 14px;
-  border-radius: 8px;
+  color: #cbd5e1;
 }
 
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid #3a506b;
-  text-align: center;
+#avg {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
-th {
-  background: #0b132b;
+#medianCgpa,
+#medianStipend {
+  font-weight: 600;
   color: #ff9f1c;
 }
 
-tr:nth-child(even) {
-  background: #16213e;
+/* ================= TABLE ================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #0b132b;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-tr:hover {
-  background: #24305e;
+/* Header */
+
+th {
+  background: #111a3a;
+  color: #ff9f1c;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #2a3a6a;
 }
 
-/* ===== Smooth Hover ===== */
-tr {
-  transition: background 0.15s ease;
-}
-.filters select {
-  padding: 8px 12px;
-  border-radius: 5px;
-  border: none;
-  font-size: 15px;
-  background: #1c2541;
-  color: #ffffff;
-  border: 1px solid #3a506b;
-}
-.scroll-sentinel {
-  height: 20px;
-}
-/* ===== Sortable Column Header ===== */
+/* Sortable column */
+
 th.sortable {
-  position: relative;
-  padding-right: 28px;
+  white-space: nowrap;
 }
 
 /* Sort button */
+
 .sort-btn {
   background: transparent;
   border: none;
-  color: #ff9f1c;    
-  font-size: 14px;
+  color: #ff9f1c;
+  font-size: 13px;
   cursor: pointer;
   margin-left: 6px;
   padding: 2px;
@@ -143,3 +159,46 @@ th.sortable {
   transform: scale(0.95);
 }
 
+/* Rows */
+
+td {
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+tr:hover {
+  background: rgba(255, 159, 28, 0.06);
+}
+
+/* ================= INFINITE SCROLL SENTINEL ================= */
+
+#scroll-sentinel {
+  height: 20px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .filters input,
+  .filters select {
+    min-width: 130px;
+  }
+
+  .stats {
+    margin: 15px auto;
+  }
+}

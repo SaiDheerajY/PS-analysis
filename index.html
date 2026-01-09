@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <h2>Internship Allotment Data</h2>
+  <h2>PS-2 Allotment Data(2024-25)</h2>
 
   <div class="filters">
     <input type="number" id="minCgpa" placeholder="Min CGPA" step="0.01">
@@ -26,8 +26,13 @@
     <button onclick="applyFilters()">Apply Filters</button>
   </div>
 
-  <p id="count"></p>
-  <p id="avg"></p>
+<div class="stats">
+  <div id="count"></div>
+  <div id="avg"></div>
+  <div id="medianCgpa"></div>
+  <div id="medianStipend"></div>
+</div>
+
 
   <!-- Table wrapper fixes empty-right-space issue -->
   <div class="table-container">
