@@ -26,7 +26,10 @@ fetch("data.json")
         return {
           CGPA: cgpa,
           Company: d.AllottedStationName,
-          Stipend: stipend
+          Stipend: stipend,
+          Sem1: Number(d.AllotedSemester1.trim()),
+          Sem2: Number(d.AllotedSemester2.trim())
+
         };
       })
       .filter(row => row !== null);
@@ -84,11 +87,19 @@ function applyFilters() {
   const company =
     document.getElementById("company").value.toLowerCase();
 
-  const filtered = data.filter(d =>
-    d.CGPA >= min &&
-    d.CGPA <= max &&
-    d.Company.toLowerCase().includes(company)
-  );
+    const semester = document.getElementById("semester").value;
+
+  const filtered = data.filter(d => {
+    const cgpaMatch = d.CGPA >= min && d.CGPA <= max;
+    const companyMatch = d.Company.toLowerCase().includes(company);
+
+    let semesterMatch = true;
+    if (semester === "sem1") semesterMatch = d.Sem1 === 1;
+    if (semester === "sem2") semesterMatch = d.Sem2 === 1;
+
+  return cgpaMatch && companyMatch && semesterMatch;
+  });
+
 
   render(filtered);
 }
