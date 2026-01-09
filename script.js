@@ -1,68 +1,125 @@
-let data = [];
+let rawData = [];        // full loaded dataset (semester file)
+let filteredData = [];  // after filters + sort
+let visibleCount = 0;
+let observer = null;
+let sortAscending = true;
 
-fetch("data.json")
+const BATCH_SIZE = 50;
+
+/* ================= LOAD DATA ================= */
+
+fetch("data.json")   // shuld change to sem1.json / sem2.json later
   .then(res => res.json())
   .then(json => {
-    data = json
+    rawData = json
       .map(d => {
-        // Clean stipend
         const stipendRaw = d.Stipend;
 
-        if (
-          stipendRaw === "" ||
-          stipendRaw === "-" ||
-          stipendRaw == null
-        ) {
-          return null; // drop invalid stipend rows
-        }
+        // Drop invalid stipend rows
+        if (!stipendRaw || stipendRaw === "-") return null;
 
         const cgpa = Number(d.CGPA);
         const stipend = Number(stipendRaw);
 
-        if (isNaN(cgpa) || isNaN(stipend)) {
-          return null;
-        }
+        if (isNaN(cgpa) || isNaN(stipend)) return null;
 
         return {
           CGPA: cgpa,
           Company: d.AllottedStationName,
-          Stipend: stipend,
-          Sem1: Number(d.AllotedSemester1.trim()),
-          Sem2: Number(d.AllotedSemester2.trim())
-
+          Stipend: stipend
         };
       })
-      .filter(row => row !== null);
+      .filter(Boolean);
 
-    render(data);
+    // Initial state: no filters applied
+    filteredData = rawData;
+    render();
   })
   .catch(err => console.error("Error loading data:", err));
 
-/* ---------- Rendering ---------- */
+/* ================= RENDER PIPELINE ================= */
 
-function render(rows) {
-  renderTable(rows);
-  renderStats(rows);
+function render() {
+  visibleCount = 0;
+  document.getElementById("tableBody").innerHTML = "";
+
+  renderStats(filteredData);
+  setupObserver();
+  loadMore();
 }
 
-function renderTable(rows) {
+/* ================= INFINITE SCROLL ================= */
+
+function loadMore() {
   const body = document.getElementById("tableBody");
-  const count = document.getElementById("count");
 
-  body.innerHTML = "";
+  const nextRows = filteredData.slice(
+    visibleCount,
+    visibleCount + BATCH_SIZE
+  );
 
-  rows.forEach(r => {
-    body.innerHTML += `
-      <tr>
+  nextRows.forEach(r => {
+    body.insertAdjacentHTML(
+      "beforeend",
+      `<tr>
         <td>${r.CGPA.toFixed(2)}</td>
         <td>${r.Company}</td>
         <td>₹${r.Stipend.toLocaleString("en-IN")}</td>
-      </tr>
-    `;
+      </tr>`
+    );
   });
 
-  count.innerText = `Showing ${rows.length} results`;
+  visibleCount += nextRows.length;
+
+  document.getElementById("count").innerText =
+    `Showing  ${filteredData.length} results`;
 }
+
+/* ================= OBSERVER ================= */
+
+function setupObserver() {
+  if (observer) observer.disconnect();
+
+  observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && visibleCount < filteredData.length) {
+      loadMore();
+    }
+  });
+
+  observer.observe(document.getElementById("scroll-sentinel"));
+}
+
+/* ================= FILTERING ================= */
+
+function applyFilters() {
+  const min = parseFloat(document.getElementById("minCgpa").value) || 0;
+  const max = parseFloat(document.getElementById("maxCgpa").value) || 10;
+  const company =
+    document.getElementById("company").value.toLowerCase();
+
+  filteredData = rawData.filter(d =>
+    d.CGPA >= min &&
+    d.CGPA <= max &&
+    d.Company.toLowerCase().includes(company)
+  );
+
+  render();
+}
+
+/* ================= SORTING ================= */
+
+function toggleSort() {
+  if (filteredData.length === 0) return;
+
+  filteredData = [...filteredData].sort((a, b) =>
+    sortAscending ? a.Stipend - b.Stipend : b.Stipend - a.Stipend
+  );
+
+  sortAscending = !sortAscending;
+  render();
+}
+
+/* ================= STATS ================= */
 
 function renderStats(rows) {
   const avgElem = document.getElementById("avg");
@@ -78,48 +135,3 @@ function renderStats(rows) {
   avgElem.innerText =
     `Average stipend for this CGPA range: ₹${avg.toLocaleString("en-IN")}`;
 }
-
-/* ---------- Filters ---------- */
-
-function applyFilters() {
-  const min = parseFloat(document.getElementById("minCgpa").value) || 0;
-  const max = parseFloat(document.getElementById("maxCgpa").value) || 10;
-  const company =
-    document.getElementById("company").value.toLowerCase();
-
-    const semester = document.getElementById("semester").value;
-
-  const filtered = data.filter(d => {
-    const cgpaMatch = d.CGPA >= min && d.CGPA <= max;
-    const companyMatch = d.Company.toLowerCase().includes(company);
-
-    let semesterMatch = true;
-    if (semester === "sem1") semesterMatch = d.Sem1 === 1;
-    if (semester === "sem2") semesterMatch = d.Sem2 === 1;
-
-  return cgpaMatch && companyMatch && semesterMatch;
-  });
-
-
-  render(filtered);
-}
-let currentRows = [];
-let sortAscending = true;
-
-function render(rows) {
-  currentRows = rows; // keep latest filtered rows
-  renderTable(rows);
-  renderStats(rows);
-}
-
-function toggleSort() {
-  const sorted = [...currentRows].sort((a, b) => {
-    return sortAscending
-      ? a.Stipend - b.Stipend
-      : b.Stipend - a.Stipend;
-  });
-
-  sortAscending = !sortAscending;
-  render(sorted);
-}
-

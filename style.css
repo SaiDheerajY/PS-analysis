@@ -113,3 +113,6 @@ tr {
   color: #ffffff;
   border: 1px solid #3a506b;
 }
+.scroll-sentinel {
+  height: 20px;
+}
