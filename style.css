@@ -116,3 +116,30 @@ tr {
 .scroll-sentinel {
   height: 20px;
 }
+/* ===== Sortable Column Header ===== */
+th.sortable {
+  position: relative;
+  padding-right: 28px;
+}
+
+/* Sort button */
+.sort-btn {
+  background: transparent;
+  border: none;
+  color: #ff9f1c;    
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 6px;
+  padding: 2px;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.sort-btn:hover {
+  color: #ffd166;
+  transform: scale(1.15);
+}
+
+.sort-btn:active {
+  transform: scale(0.95);
+}
+

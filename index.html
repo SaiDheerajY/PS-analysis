@@ -24,7 +24,6 @@
       <option value="sem2">Semester 2</option>
     </select>
     <button onclick="applyFilters()">Apply Filters</button>
-    <button onclick="toggleSort()">Sort by Stipend</button>
   </div>
 
   <p id="count"></p>
@@ -37,7 +36,10 @@
         <tr>
           <th>CGPA</th>
           <th>Company</th>
-          <th>Stipend</th>
+          <th class="sortable">
+             Stipend
+              <button class="sort-btn" onclick="toggleSort()">⇅</button>
+          </th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
